@@ -1,10 +1,10 @@
 {
   "name": "mk-trading-bot",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "license": "UNLICENSED",
+  "description": "The trading bot application",
+  "author": "Mikhail Kultyiasau",
+  "private": false,
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
