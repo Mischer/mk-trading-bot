@@ -55,7 +55,7 @@ describe('BinanceService tests', () => {
 		mockedAxios.get.mockResolvedValue({ data: mockResponse });
 
 		const symbol = 'BTCUSDT';
-		const result = await service.getTrades(symbol);
+		const result = await service.fetchRecentTrades(symbol);
 
 		expect(result).toEqual(plainToInstance(BinanceTradeDto, mockResponse));
 		expect(mockedAxios.get).toHaveBeenCalledWith(`https://api.binance.com/api/v3/trades?symbol=${symbol}`);
@@ -66,7 +66,7 @@ describe('BinanceService tests', () => {
 
 		const symbol = 'BTCUSDT';
 
-		await expect(service.getTrades(symbol)).rejects.toThrow(InternalServerErrorException);
+		await expect(service.fetchRecentTrades(symbol)).rejects.toThrow(InternalServerErrorException);
 		expect(mockedAxios.get).toHaveBeenCalledWith(`https://api.binance.com/api/v3/trades?symbol=${symbol}`);
 	});
 });

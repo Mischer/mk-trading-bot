@@ -11,7 +11,7 @@ export class BinanceService {
 		this.binanceApiUrl = configService.get('BINANCE_API_URL');
 	}
 
-	async getTrades(symbol: string, limit?: number): Promise<BinanceTradeDto[]> {
+	async fetchRecentTrades(symbol: string, limit?: number): Promise<BinanceTradeDto[]> {
 		try {
 			const response = await axios.get(
 				`${this.binanceApiUrl}/api/v3/trades?symbol=${symbol}${limit ? `&limit=${limit}` : ''}`,
@@ -24,7 +24,7 @@ export class BinanceService {
 
 			return plainToInstance(BinanceTradeDto, response.data) as BinanceTradeDto[];
 		} catch (error) {
-			console.log('Error fetching trades from Binance API:', error.message || error);
+			console.log('Error fetching trades from Binance API:', error.message || error); // TODO integrate logger
 
 			throw new InternalServerErrorException('Failed to fetch recent trades from Binance API');
 		}

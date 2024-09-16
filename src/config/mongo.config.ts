@@ -20,7 +20,8 @@ function getMongoUrl(configService): string {
 		':' +
 		configService.get('MONGO_PORT') +
 		'/' +
-		configService.get('MONGO_AUTH_DATABASE')
+		configService.get('MONGO_AUTH_DATABASE') +
+		'?authSource=admin'
 	);
 }
 
