@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConfig } from './config/mongo.config';
 import { TradesModule } from './trades/trades.module';
+import { BinanceModule } from './binance/binance.module';
 
 @Module({
 	imports: [
@@ -15,6 +16,7 @@ import { TradesModule } from './trades/trades.module';
 			inject: [ConfigService],
 		}),
 		TradesModule,
+		BinanceModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
