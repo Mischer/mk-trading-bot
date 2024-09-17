@@ -3,6 +3,7 @@ import { TradesRepository } from './trades.repository';
 import { TradeModel } from './models/trade.model';
 import { ConfigService } from '@nestjs/config';
 import { BinanceService } from '../binance/binance.service';
+import { BinanceTradeDto } from '../binance/dto/binance-trade.dto';
 
 @Injectable()
 export class TradesService {
@@ -15,8 +16,8 @@ export class TradesService {
 	async fetchAndStoreTrades(symbol: string, limit?: number): Promise<TradeModel[]> {
 		const trades = await this.binanceService.fetchRecentTrades(symbol, limit);
 
-		const formattedTrades = trades.map((trade) => {
-			return new TradeModel({
+		const formattedTrades = trades.map((trade: BinanceTradeDto) => {
+			return {
 				symbol,
 				price: trade.price,
 				quantity: trade.qty,
@@ -24,7 +25,7 @@ export class TradesService {
 				timestamp: new Date(trade.time),
 				isBuyerMaker: trade.isBuyerMaker,
 				isBestMatch: trade.isBestMatch,
-			});
+			};
 		});
 		return this.tradesRepository.insertTrades(formattedTrades);
 	}

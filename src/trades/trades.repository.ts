@@ -7,7 +7,7 @@ import { TradeModel } from './models/trade.model';
 export class TradesRepository {
 	constructor(@InjectModel(TradeModel.name) private readonly tradeModel: Model<TradeModel>) {}
 
-	async insertTrades(trades: TradeModel[]): Promise<TradeModel[]> {
+	async insertTrades(trades: Partial<TradeModel>[]): Promise<TradeModel[]> {
 		return this.tradeModel.insertMany(trades, { ordered: false }); // In case of some incorrect trade exists the app should still save all correct docs
 	}
 
