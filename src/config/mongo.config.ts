@@ -2,7 +2,6 @@ import { ConfigService } from '@nestjs/config';
 import { MongooseModuleOptions } from '@nestjs/mongoose';
 
 export const getMongoConfig = async (configService: ConfigService): Promise<MongooseModuleOptions> => {
-	console.log('MONGO URL: ' + getMongoUrl(configService));
 	return {
 		uri: getMongoUrl(configService),
 		...getMongoOptions(),

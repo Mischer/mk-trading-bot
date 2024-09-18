@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { TradesRepository } from './trades.repository';
 import { TradeModel } from './models/trade.model';
 import { ConfigService } from '@nestjs/config';
@@ -8,11 +8,14 @@ import { SymbolEnum } from '../types/symbols.types';
 
 @Injectable()
 export class TradesService {
+	private readonly logger;
 	constructor(
 		private configService: ConfigService,
 		private tradesRepository: TradesRepository,
 		private binanceService: BinanceService,
-	) {}
+	) {
+		this.logger = new Logger(BinanceService.name);
+	}
 
 	async fetchAndStoreTrades(symbol: SymbolEnum, limit?: number): Promise<TradeModel[]> {
 		const trades = await this.binanceService.fetchRecentTrades(symbol, limit);
@@ -43,10 +46,10 @@ export class TradesService {
 		const targetSellPrice = lastPrice * (1 + percentage / 100);
 
 		if (lastPrice <= targetBuyPrice) {
-			console.log(`Buying ${symbol} at ${lastPrice}`);
+			logger.log(`Buying ${symbol} at ${lastPrice}`);
 			// TODO implement buy logic
 		} else if (lastPrice >= targetSellPrice) {
-			console.log(`Selling ${symbol} at ${lastPrice}`);
+			logger.log(`Selling ${symbol} at ${lastPrice}`);
 			// TODO implement sell logic
 		}
 	}
