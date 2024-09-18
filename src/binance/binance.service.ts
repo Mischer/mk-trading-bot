@@ -1,28 +1,30 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BinanceTradeDto } from './dto/binance-trade.dto';
-import { plainToInstance } from 'class-transformer';
-import axios from 'axios';
+import { TradesResponse } from './models/trades-response';
+import axios, { AxiosResponse } from 'axios';
+import { SymbolEnum } from '../types/symbols.types';
 
 @Injectable()
 export class BinanceService {
 	private readonly binanceApiUrl: string;
+
 	constructor(private readonly configService: ConfigService) {
 		this.binanceApiUrl = configService.get('BINANCE_API_URL');
 	}
 
-	async fetchRecentTrades(symbol: string, limit?: number): Promise<BinanceTradeDto[]> {
+	public async fetchRecentTrades(symbol: SymbolEnum, limit?: number): Promise<TradesResponse> {
 		try {
-			const response = await axios.get(
-				`${this.binanceApiUrl}/api/v3/trades?symbol=${symbol}${limit ? `&limit=${limit}` : ''}`,
+			const response: AxiosResponse<TradesResponse> = await axios.get<TradesResponse>(
+				`${this.binanceApiUrl}/api/v3/trades`,
+				{
+					params: {
+						symbol,
+						...(limit && { limit }),
+					},
+				},
 			);
 
-			// should check it before map to DTO object for success TS compile
-			if (!Array.isArray(response.data)) {
-				throw new InternalServerErrorException('Expected an array of trades from Binance API');
-			}
-
-			return plainToInstance(BinanceTradeDto, response.data) as BinanceTradeDto[];
+			return response.data;
 		} catch (error) {
 			console.log('Error fetching trades from Binance API:', error.message || error); // TODO integrate logger
 

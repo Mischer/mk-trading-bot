@@ -3,7 +3,8 @@ import { TradesRepository } from './trades.repository';
 import { TradeModel } from './models/trade.model';
 import { ConfigService } from '@nestjs/config';
 import { BinanceService } from '../binance/binance.service';
-import { BinanceTradeDto } from '../binance/dto/binance-trade.dto';
+import { Trade } from '../binance/models/trades-response';
+import { SymbolEnum } from '../types/symbols.types';
 
 @Injectable()
 export class TradesService {
@@ -13,10 +14,10 @@ export class TradesService {
 		private binanceService: BinanceService,
 	) {}
 
-	async fetchAndStoreTrades(symbol: string, limit?: number): Promise<TradeModel[]> {
+	async fetchAndStoreTrades(symbol: SymbolEnum, limit?: number): Promise<TradeModel[]> {
 		const trades = await this.binanceService.fetchRecentTrades(symbol, limit);
 
-		const formattedTrades = trades.map((trade: BinanceTradeDto) => {
+		const formattedTrades = trades.map((trade: Trade) => {
 			return {
 				symbol,
 				price: trade.price,

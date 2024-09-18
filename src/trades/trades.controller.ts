@@ -1,16 +1,17 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { TradesService } from './trades.service';
+import { SymbolEnum } from '../types/symbols.types';
 
-@Controller('trades')
+@Controller('/v1/trades')
 export class TradesController {
 	constructor(private readonly tradesService: TradesService) {}
 
 	@Get(':symbol')
-	async getTrades(@Param('symbol') symbol: string, @Query('limit') limit?: number) {
+	async getTrades(@Param('symbol') symbol: SymbolEnum, @Query('limit') limit?: number) {
 		return this.tradesService.fetchAndStoreTrades(symbol, limit);
 	}
 
-	@Get(':symbol/strategy')
+	@Post(':symbol/start')
 	async executeStrategy(@Param('symbol') symbol: string) {
 		return this.tradesService.executeTradingStrategy(symbol);
 	}

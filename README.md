@@ -8,8 +8,13 @@ Simple trading bot
 $ npm install
 ```
 
-## Running the app
+## Docker 
 
+```docker
+$ docker-compose up
+```
+
+## Running the app
 ```bash
 # development
 $ npm run start

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "The trading bot application",
   "author": "Mikhail Kultyiasau",
-  "private": false,
+  "private": true,
   "license": "MIT",
   "scripts": {
     "build": "nest build",

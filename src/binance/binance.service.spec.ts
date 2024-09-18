@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BinanceService } from './binance.service';
 import { ConfigService } from '@nestjs/config';
-import { BinanceTradeDto } from './dto/binance-trade.dto';
-import { plainToInstance } from 'class-transformer';
+import { TradesResponse } from './models/trades-response';
 import { InternalServerErrorException } from '@nestjs/common';
+import { SymbolEnum } from '../types/symbols.types';
 import axios from 'axios';
 
 jest.mock('axios');
@@ -50,23 +50,22 @@ describe('BinanceService tests', () => {
 				isBuyerMaker: true,
 				isBestMatch: true,
 			},
-		];
+		] as TradesResponse;
 
 		mockedAxios.get.mockResolvedValue({ data: mockResponse });
 
-		const symbol = 'BTCUSDT';
+		const symbol = SymbolEnum.BTCUSDT;
 		const result = await service.fetchRecentTrades(symbol);
 
-		expect(result).toEqual(plainToInstance(BinanceTradeDto, mockResponse));
-		expect(mockedAxios.get).toHaveBeenCalledWith(`https://api.binance.com/api/v3/trades?symbol=${symbol}`);
+		expect(result).toEqual(mockResponse);
+		expect(mockedAxios.get).toHaveBeenCalledWith(`https://api.binance.com/api/v3/trades`, { params: { symbol } });
 	});
 
 	it('should handle errors when fetching trades', async () => {
 		mockedAxios.get.mockRejectedValue(new Error('Network error'));
 
-		const symbol = 'BTCUSDT';
-
+		const symbol = SymbolEnum.BTCUSDT;
 		await expect(service.fetchRecentTrades(symbol)).rejects.toThrow(InternalServerErrorException);
-		expect(mockedAxios.get).toHaveBeenCalledWith(`https://api.binance.com/api/v3/trades?symbol=${symbol}`);
+		expect(mockedAxios.get).toHaveBeenCalledWith(`https://api.binance.com/api/v3/trades`, { params: { symbol } });
 	});
 });
