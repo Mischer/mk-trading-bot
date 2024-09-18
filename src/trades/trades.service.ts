@@ -34,7 +34,7 @@ export class TradesService {
 		return this.tradesRepository.insertTrades(formattedTrades);
 	}
 
-	async executeTradingStrategy(symbol: string) {
+	async executeTradingStrategy(symbol: SymbolEnum) {
 		const trades = await this.tradesRepository.findRecentTrades(symbol, 50);
 		const latestTrade = trades[0];
 

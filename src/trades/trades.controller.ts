@@ -12,7 +12,7 @@ export class TradesController {
 	}
 
 	@Post(':symbol/start')
-	async executeStrategy(@Param('symbol') symbol: string) {
+	async executeStrategy(@Param('symbol') symbol: SymbolEnum) {
 		return this.tradesService.executeTradingStrategy(symbol);
 	}
 }

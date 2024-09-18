@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { SymbolEnum } from '../../types/symbols.types';
 
 @Schema()
 export class TradeModel extends Document {
 	@Prop({ required: true })
-	symbol: string;
+	symbol: SymbolEnum;
 
 	@Prop({ required: true })
 	price: string;
