@@ -13,6 +13,6 @@ export class TradesRepository {
 	}
 
 	async findRecentTrades(symbol: SymbolEnum, limit: number): Promise<TradeModel[]> {
-		return this.tradeModel.find({ symbol }).sort({ timestamp: -1 }).limit(limit).exec();
+		return this.tradeModel.find({ symbol }).sort({ timestamp: -1 }).limit(limit).lean().exec();
 	}
 }

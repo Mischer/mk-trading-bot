@@ -34,7 +34,7 @@ export class TradesService {
 				this.strategy = this.buyLowSellHighStrategy;
 				break;
 			default:
-				throw new Error('Unknown trading strategy');
+				throw new InternalServerErrorException('Unknown trading strategy');
 		}
 	}
 
@@ -56,81 +56,16 @@ export class TradesService {
 	}
 
 	async executeTradingStrategy(symbol: SymbolEnum, startDeposit: number): Promise<number> {
-		this.logger.log(`START BOT`);
-		/*		const trades = await this.tradesRepository.findRecentTrades(symbol, 100);
+		const trades: TradeModel[] = await this.tradesRepository.findRecentTrades(symbol, 100);
 		if (!trades.length) {
+			this.logger.warn('There are no trades in DB');
 			return startDeposit;
-		}*/
-		const trades: Trade[] = [
-			{
-				id: 1,
-				price: '100',
-				qty: '1',
-				quoteQty: '100',
-				time: 1499865549590,
-				isBuyerMaker: true,
-				isBestMatch: true,
-			},
-			{
-				id: 1,
-				price: '101',
-				qty: '1',
-				quoteQty: '101',
-				time: 1499865549591,
-				isBuyerMaker: true,
-				isBestMatch: true,
-			},
-			{
-				id: 1,
-				price: '99',
-				qty: '1',
-				quoteQty: '99',
-				time: 1499865549592,
-				isBuyerMaker: true,
-				isBestMatch: true,
-			},
-		];
+		}
 
 		if (!this.strategy) {
 			this.logger.error('Trading strategy must be set', this.strategy);
 			throw new InternalServerErrorException('Trading strategy must be set');
 		}
 		return this.strategy.execute(symbol, trades, startDeposit);
-
-		/*		const percentage = this.configService.get('SIMPLE_BUY_SELL_STRATEGY_PERCENTAGE', 1);
-		// const percentage = this.configService.get('SIMPLE_BUY_SELL_STRATEGY_BUYING_SELLING_DEPOSIT_PERCENTAGE', 10);
-		let resultAmount: number = startDeposit;
-		let lastBuyingTrade: SimpleTrade = null;
-		let lastSellingTrade: SimpleTrade = null;
-		for (const trade of trades) {
-			const price = parseFloat(trade.price);
-			const targetBuyPrice = price * (1 - percentage / 100);
-			const targetSellPrice = price * (1 + percentage / 100);
-
-			const count = 1; // FIXME calculate it
-			const amount = price * count;
-			if (price <= targetBuyPrice && !lastBuyingTrade && resultAmount >= amount) {
-				lastBuyingTrade = {
-					price,
-					count,
-					amount,
-				};
-				this.logger.log(`Buying ${symbol} at ${price}`, lastBuyingTrade);
-				resultAmount -= amount;
-				lastSellingTrade = null;
-			} else if (price >= targetSellPrice && !lastSellingTrade && lastBuyingTrade) {
-				const amount = price * lastBuyingTrade.count;
-				lastSellingTrade = {
-					price,
-					count: lastBuyingTrade.count,
-					amount,
-				};
-				this.logger.log(`Selling ${symbol} at ${price}`, lastSellingTrade);
-				resultAmount += amount;
-				lastBuyingTrade = null;
-			}
-		}
-		this.logger.log(`FINISH BOT`);
-		return resultAmount;*/
 	}
 }
