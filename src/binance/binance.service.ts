@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common
 import { ConfigService } from '@nestjs/config';
 import { TradesResponse } from './models/trades-response';
 import axios, { AxiosResponse } from 'axios';
-import { SymbolEnum } from '../types/symbols.types';
+import { SymbolEnum } from '../types/symbols.enum';
 
 @Injectable()
 export class BinanceService {
@@ -28,7 +28,7 @@ export class BinanceService {
 
 			return response.data;
 		} catch (error) {
-			logger.error('Error fetching trades from Binance API:', error.message || error);
+			this.logger.error('Error fetching trades from Binance API:', error.message || error);
 
 			throw new InternalServerErrorException('Failed to fetch recent trades from Binance API');
 		}

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { SymbolEnum } from '../../types/symbols.types';
+import { SymbolEnum } from '../../types/symbols.enum';
 
 @Schema()
 export class TradeModel extends Document {

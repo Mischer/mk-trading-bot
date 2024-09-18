@@ -3,7 +3,7 @@ import { BinanceService } from './binance.service';
 import { ConfigService } from '@nestjs/config';
 import { TradesResponse } from './models/trades-response';
 import { InternalServerErrorException } from '@nestjs/common';
-import { SymbolEnum } from '../types/symbols.types';
+import { SymbolEnum } from '../types/symbols.enum';
 import axios from 'axios';
 
 jest.mock('axios');

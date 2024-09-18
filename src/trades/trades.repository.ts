@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TradeModel } from './models/trade.model';
-import { SymbolEnum } from '../types/symbols.types';
+import { SymbolEnum } from '../types/symbols.enum';
 
 @Injectable()
 export class TradesRepository {

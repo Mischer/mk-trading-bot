@@ -1,6 +1,7 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { TradesService } from './trades.service';
-import { SymbolEnum } from '../types/symbols.types';
+import { SymbolEnum } from '../types/symbols.enum';
+import { ExecuteStrategyDto } from './dto/execute-strategy.dto';
 
 @Controller('/v1/trades')
 export class TradesController {
@@ -11,8 +12,9 @@ export class TradesController {
 		return this.tradesService.fetchAndStoreTrades(symbol, limit);
 	}
 
-	@Post(':symbol/start')
-	async executeStrategy(@Param('symbol') symbol: SymbolEnum) {
-		return this.tradesService.executeTradingStrategy(symbol);
+	@Post('/start')
+	async executeStrategy(@Body() dto: ExecuteStrategyDto): Promise<number> {
+		this.tradesService.setStrategy(dto.strategyName);
+		return this.tradesService.executeTradingStrategy(dto.symbol, dto.startDeposit); // TODO should run in background
 	}
 }
